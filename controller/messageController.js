@@ -1,10 +1,4 @@
-const {
-  getAllMessages,
-  addMessage,
-  getMessageById,
-  updateMessage,
-  deleteMessage,
-} = require('../db.js');
+const queries = require('../db/queries');
 const { body, validationResult } = require('express-validator');
 
 const validateMessage = [
@@ -22,27 +16,14 @@ const validateMessage = [
     .withMessage('Bio must be less than 200 characters'),
 ];
 
-async function getMessages(req, res) {
-  try {
-    res.render('index', {
-      title: 'Mini Message Board',
-      messages: getAllMessages(),
-    });
-  } catch (error) {
-    console.error('Error fetching messages:', error);
-    res.status(500).send('Internal Server Error');
-  }
-}
-
 async function newMessage(req, res) {
   try {
-    res.render('form', { title: 'New Message', errors: [], formData: {} });
     res.render('form', {
       title: 'New Message',
       errors: [],
       formData: {},
       formAction: '/new',
-      submitLabel: 'Create',
+      submitLabel: 'Create Message',
     });
   } catch (error) {
     console.error('Error creating new message:', error);
@@ -59,11 +40,13 @@ async function createMessage(req, res) {
       title: 'New Message',
       errors: errors.array(),
       formData: { text, user, email, age, bio },
+      formAction: '/new',
+      submitLabel: 'Create Message',
     });
   }
 
   try {
-    addMessage(text, user, email, age, bio);
+    await queries.createMessage(text, user, email, age, bio);
     res.redirect('/');
   } catch (error) {
     console.error('Error saving new message:', error);
@@ -71,10 +54,22 @@ async function createMessage(req, res) {
   }
 }
 
+async function getMessages(req, res) {
+  try {
+    const messages = await queries.getAllMessages();
+    res.render('index', {
+      title: 'Mini Message Board',
+      messages,
+    });
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
 async function getMessageDetails(req, res) {
   try {
-    const message = getMessageById(Number(req.params.id));
-    console.log(message);
+    const message = await queries.getMessageById(Number(req.params.id));
     if (!message) {
       return res.status(404).send('Message not found');
     }
@@ -98,7 +93,7 @@ async function update(req, res) {
   }
 
   try {
-    const updatedMessage = updateMessage(
+    const updatedMessage = await queries.updateMessage(
       Number(id),
       text,
       user,
@@ -118,7 +113,7 @@ async function update(req, res) {
 
 async function updateForm(req, res) {
   try {
-    const message = getMessageById(Number(req.params.id));
+    const message = await queries.getMessageById(Number(req.params.id));
     if (!message) {
       return res.status(404).send('Message not found');
     }
@@ -137,7 +132,7 @@ async function updateForm(req, res) {
 async function deleteM(req, res) {
   try {
     const { id } = req.params;
-    const deleted = deleteMessage(Number(id));
+    const deleted = await queries.deleteMessage(Number(id));
     if (!deleted) {
       return res.status(404).send('Message not found');
     }
@@ -159,11 +154,7 @@ async function searchUsers(req, res) {
     });
   }
 
-  const user = getAllMessages().find(
-    (msg) =>
-      msg.user.toLowerCase() === query || msg.email.toLowerCase() === query
-  );
-
+  const user = await queries.searchMessage(query);
   res.render('search-result', {
     title: 'Search Result',
     user: user || null,
