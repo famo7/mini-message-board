@@ -1,0 +1,37 @@
+<% if (user) { %>
+  <div class="user-card">
+    <h2>
+      <%= user.user %>
+    </h2>
+    <p><strong>Email:</strong>
+      <%= user.email %>
+    </p>
+    <p><strong>Age:</strong>
+      <%= user.age %>
+    </p>
+    <p><strong>Bio:</strong>
+      <%= user.bio || 'No bio provided.' %>
+    </p>
+    <p><strong>Added:</strong>
+      <%= user.added.toLocaleString() %>
+    </p>
+    <a href="/messages/<%= user.id %>">View Full Message</a>
+  </div>
+  <% } else if (typeof user !=='undefined' ) { %>
+    <p>No user found matching "<%= query %>".</p>
+    <% } %>
+
+      <style>
+        .search-form {
+          margin-bottom: 20px;
+        }
+
+        .user-card {
+          border: 1px solid #ccc;
+          padding: 15px;
+          border-radius: 6px;
+          background-color: #f9f9f9;
+          max-width: 400px;
+          margin: 20px auto;
+        }
+      </style>

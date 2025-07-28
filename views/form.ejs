@@ -1,62 +1,135 @@
 <!-- views/form.ejs -->
 <h1 class="page-title">New Message</h1>
 
-<form action="/new" method="POST" class="simple-form">
-  <input type="text" name="user" placeholder="Your name" required>
-  <textarea name="text" placeholder="Your message" rows="4" required></textarea>
-  <button type="submit" class="submit-button">Submit</button>
-</form>
+<% if (errors && errors.length> 0) { %>
+  <div class="error-messages">
+    <h2>Please correct the following errors:</h2>
+    <ul>
+      <% errors.forEach(error=> { %>
+        <li>
+          <%= error.msg %>
+        </li>
+        <% }); %>
+    </ul>
+  </div>
+  <% } %>
 
-<style>
-  /* Minimal styles for the form. Move this to public/styles.css */
-  .page-title {
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 1.5rem;
-    color: #333;
-  }
+    <form action="<%= formAction %>" method="POST" class="simple-form">
+      <div class="form-group">
+        <label for="user">Your Name:</label>
+        <input type="text" id="user" name="user" placeholder="Your name" value="<%= formData.user || '' %>" required>
+      </div>
 
-  .simple-form {
-    background-color: #fff;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    max-width: 400px;
-    margin: 20px auto;
-    /* Center the form */
-    display: flex;
-    /* Use flexbox for simple stacking */
-    flex-direction: column;
-    /* Stack items vertically */
-    gap: 15px;
-    /* Space between elements */
-  }
+      <div class="form-group">
+        <label for="text">Message:</label>
+        <textarea id="text" name="text" placeholder="Your message" rows="4"
+          required><%= formData.text || '' %></textarea>
+      </div>
 
-  .simple-form input[type="text"],
-  .simple-form textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    box-sizing: border-box;
-    /* Include padding in width */
-  }
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Your email" value="<%= formData.email || '' %>"
+          required>
+      </div>
 
-  .submit-button {
-    background-color: #007bff;
-    /* Blue */
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    align-self: flex-end;
-    /* Align button to the right within flex container */
-  }
+      <div class="form-group">
+        <label for="age">Age (18-120, optional):</label>
+        <input type="number" id="age" name="age" placeholder="Your age" value="<%= formData.age || '' %>">
+      </div>
 
-  .submit-button:hover {
-    background-color: #0056b3;
-  }
-</style>
+      <div class="form-group">
+        <label for="bio">Bio (max 200 chars, optional):</label>
+        <textarea id="bio" name="bio" placeholder="Tell us about yourself" rows="3"><%= formData.bio || '' %></textarea>
+      </div>
+
+      <button type="submit" class="submit-button">
+        <%= submitLabel || 'Submit' %>
+      </button>
+    </form>
+
+    <style>
+      .page-title {
+        font-size: 2rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: #333;
+      }
+
+      .error-messages {
+        background-color: #ffe0e0;
+        border: 1px solid #ff9999;
+        color: #cc0000;
+        padding: 10px 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .error-messages h2 {
+        font-size: 1.1rem;
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+
+      .error-messages ul {
+        list-style-type: disc;
+        margin-left: 20px;
+        padding: 0;
+      }
+
+      .error-messages li {
+        margin-bottom: 5px;
+      }
+
+      .simple-form {
+        background-color: #fff;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        max-width: 400px;
+        margin: 20px auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .form-group {
+        margin-bottom: 0;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #555;
+      }
+
+      .simple-form input[type="text"],
+      .simple-form input[type="email"],
+      .simple-form input[type="number"],
+      .simple-form textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        box-sizing: border-box;
+      }
+
+      .submit-button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        align-self: flex-end;
+      }
+
+      .submit-button:hover {
+        background-color: #0056b3;
+      }
+    </style>

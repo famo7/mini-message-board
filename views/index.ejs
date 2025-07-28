@@ -15,15 +15,17 @@
           </div>
           <!-- Link to message detail page using the array index -->
           <div class="message-actions">
-            <a href="/messages/<%= index %>">View Details</a>
+            <a href="/messages/<%= message.id %>">View Details</a>
             <%# Used 'index' here %>
           </div>
+
         </div>
         <% }); %>
           <% } else { %>
             <p class="no-messages">No messages yet. Be the first to post!</p>
             <% } %>
 </div>
+<a href="/search" class="search-button">Search Users</a>
 
 <div class="add-message-container">
   <a href="/new">

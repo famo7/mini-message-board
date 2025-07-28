@@ -1,17 +1,126 @@
+<!-- views/message-detail.ejs -->
+
 <h1 class="page-title">Message Details</h1>
 
 <div class="message-detail-card">
-  <p class="message-text"><strong>Message:</strong>
+  <p class="detail-item"><strong>Message:</strong>
     <%= message.text %>
   </p>
-  <p class="message-user"><strong>By:</strong>
+  <p class="detail-item"><strong>By:</strong>
     <%= message.user %>
   </p>
-  <p class="message-date"><strong>Added On:</strong>
+  <p class="detail-item"><strong>Email:</strong>
+    <%= message.email %>
+  </p>
+  <p class="detail-item"><strong>Age:</strong>
+    <%= message.age %>
+  </p>
+  <p class="detail-item"><strong>Bio:</strong>
+    <%= message.bio %>
+  </p>
+  <p class="detail-item"><strong>Added On:</strong>
     <%= message.added.toLocaleString() %>
   </p>
 </div>
 
-<div class="back-link-container">
+<div class="message-actions-container">
   <a href="/" class="back-link">Back to Messages</a>
+  <a href="/messages/<%= message.id %>/edit" class="edit-button">Edit Message</a>
+
+  <form action="/delete/<%= message.id %>" method="POST" style="display:inline;">
+    <button type="submit" class="delete-button">Delete Message</button>
+  </form>
 </div>
+<style>
+  .page-title {
+    font-size: 2.25rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #333;
+  }
+
+  .message-detail-card {
+    background-color: #fff;
+    padding: 2rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    max-width: 600px;
+    margin: 2rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .detail-item {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #444;
+    border-bottom: 1px dashed #f0f0f0;
+    padding-bottom: 0.5rem;
+  }
+
+  .detail-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .detail-item strong {
+    color: #222;
+    margin-right: 0.5rem;
+  }
+
+  .message-actions-container {
+    text-align: center;
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .back-link,
+  .edit-button,
+  .delete-button {
+    display: inline-block;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+    /* Ensure buttons don't have default borders */
+    cursor: pointer;
+    /* Indicate it's clickable */
+  }
+
+  .back-link {
+    background-color: #6c757d;
+  }
+
+  .back-link:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+  }
+
+  .edit-button {
+    background-color: #007bff;
+  }
+
+  .edit-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+  }
+
+  .delete-button {
+    background-color: #dc3545;
+    /* Red for delete */
+  }
+
+  .delete-button:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+  }
+</style>
